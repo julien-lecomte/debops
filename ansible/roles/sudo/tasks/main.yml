@@ -57,9 +57,7 @@
   lineinfile:
     dest: '/etc/sudoers'
     regexp: '^(?:@|#)includedir\s+\/etc\/sudoers.d$'
-    line: '{{ ("#"
-               if ansible_local.sudo.version|d("0.0.0") is version("1.9.1", "<")
-               else "@") + "includedir /etc/sudoers.d" }}'
+    line: '#includedir /etc/sudoers.d'
     insertafter: 'EOF'
     state: 'present'
     validate: 'visudo -cf "%s"'
