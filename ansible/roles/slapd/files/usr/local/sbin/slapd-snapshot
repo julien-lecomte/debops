@@ -51,7 +51,7 @@ get_databases () {
 
     result="$(ldapsearch -QALLL -Y EXTERNAL -H ldapi:/// -b cn=config -s one "${search_filter}" dn)"
     if [ -n "${result}" ] ; then
-        printf "%s\n" "${result}" | sed -e '/./!d' -e 's/^dn: //'
+        echo "${result}" | sed -e '/./!d' -e 's/^dn: //'
     else
 
         # The first search was empty, most likely due to not enabled cn=Monitor
@@ -60,11 +60,11 @@ get_databases () {
 
         result="$(ldapsearch -QALLL -Y EXTERNAL -H ldapi:/// -b cn=config -s one "${search_filter}" dn)"
         if [ -n "${result}" ] ; then
-            printf "%s\n" "${result}" | sed -e '/./!d' -e 's/^dn: //'
+            echo "${result}" | sed -e '/./!d' -e 's/^dn: //'
         else
 
             # There was no result either, give up.
-            printf "\n"
+            echo ""
         fi
     fi
 }
