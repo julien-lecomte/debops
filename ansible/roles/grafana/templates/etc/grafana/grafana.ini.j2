@@ -9,24 +9,24 @@
 # analytics & monitoring solution for every database
 #
 # Commented options show their default value.
-{% for element in grafana__combined_configuration | parse_kv_config %}
+{% for element in grafana__combined_configuration %}
 {%   if element.state|d('present') not in [ 'absent', 'ignore' ] %}
 {%     if not loop.first %}
 
 {%     endif %}
-{%   if element.name == "" %}
+{%     if element.name == "" %}
 {{ element.name }}
-{%   else %}
+{%     else %}
 [{{ element.name }}]
-{%   endif %}
-{%     if element.options is defined %}
+{%     endif %}
+{%     if element.options is defined and element.options != None %}
 {%       for item in element.options %}
 {%         set item_prefix = (';' if item.state|d('present') == 'comment' else '') %}
 {%         if item.name|d() and item.state|d('present') not in [ 'absent', 'ignore' ] %}
 {%           if not loop.first %}
 
 {%           endif %}
-{%           if item.comment|d() != '' %}{{ '# {}'.format(item.comment) }}{% endif %}
+{%           if item.comment|d() != '' %}{{ '# {}'.format(item.comment.replace('\n', '\n# ')[:-2]) }}{% endif -%}
 {{           '{}{} = {}'.format(item_prefix, item.name, item.value) }}
 {%         endif %}
 {%       endfor %}

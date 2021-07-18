@@ -1,0 +1,90 @@
+---
+# .. vim: foldmarker=[[[,]]]:foldmethod=marker
+
+# .. Copyright (C) 2019 Innobyte Bechea Leonardo <https://www.innobyte.com/>
+# .. Copyright (C) 2019 Innobyte Alin Alexandru <https://www.innobyte.com/>
+# .. Copyright (C) 2021 DebOps <https://debops.org/>
+# .. SPDX-License-Identifier: GPL-3.0-only
+
+# .. envvar:: grafana__default_configuration [[[
+
+# List of the default Grafana configuration options defined by the role.
+grafana__default_configuration:
+
+  - name: 'server'                                                 # [[[
+    options:
+      - name: 'http_addr'
+        value: '{{ "localhost" if grafana__nginx_enabled else "" }}'
+        comment: |
+          The ip address to bind to, empty will bind to all interfaces
+        state: '{{ "present" if grafana__nginx_enabled else "comment" }}'
+
+      - name: 'http_port'
+        value: '{{ grafana__port }}'
+        comment: |
+          The http port  to use
+        state: 'present'
+
+      - name: 'domain'
+        value: '{{ ansible_fqdn }}'
+        comment: |
+          The public facing domain name used to access grafana from a browser
+        state: 'present'
+
+      - name: 'root_url'
+        value: "%(protocol)s://%(domain)s:%(http_port)s/"
+        comment: |
+          The full public facing url you use in browser, used for redirects and emails If you use reverse proxy and sub path specify full url (with sub path)
+        state: 'comment'
+
+                                                                   # ]]]
+  - name: 'auth.anonymous'                                         # [[[
+    options:
+      - name: 'enabled'
+        comment: |
+          enable anonymous access
+        value: true
+        state: 'present'
+
+      - name: 'hide_version'
+        comment: |
+          mask the Grafana version number for unauthenticated users
+        value: true
+        state: 'present'
+
+                                                                   # ]]]
+  - name: 'analytics'                                              # [[[
+    options:
+      - name: 'reporting_enabled'
+        comment: |
+          Server reporting, sends usage counters to stats.grafana.org every 24 hours.
+        value: false
+        state: 'present'
+
+      - name: 'check_for_updates'
+        comment: |
+          Set to false to disable all checks to https://grafana.net
+        value: false
+        state: 'present'
+
+                                                                   # ]]]
+  - name: 'users'                                                  # [[[
+    options:
+      - name: 'allow_sign_up'
+        comment: |
+          disable user signup / registration
+        value: 'false'
+        state: 'present'
+
+                                                                   # ]]]
+  - name: 'explore'                                                # [[[
+    options:
+      - name: 'enabled'
+        comment: |
+          Enable the Explore section
+        value: false
+        state: 'present'
+
+                                                                   # ]]]
+                                                                   # ]]]
+                                                                   # ]]]

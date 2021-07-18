@@ -14,6 +14,10 @@
   import_role:
     name: 'global_handlers'
 
+- name: Import DebOps secret role
+  import_role:
+    name: 'secret'
+
 # Package installation [[[1
 - name: Install Grafana packages
   apt:
